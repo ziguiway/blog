@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zigui.blog.dao.mapper.TagMapper">
+
+    <select id="findTagsByArticleId" parameterType="long" resultType="com.zigui.blog.dao.pojo.Tag">
+        SELECT
+            id,
+            avatar,
+            tag_name
+        FROM
+            ms_tag
+        WHERE
+                id IN (
+                SELECT
+                    tag_id
+                FROM
+                    ms_article_tag
+                WHERE
+                    article_id = #{articleId})
+    </select>
+    <select id="findHotTagIdList" resultType="java.lang.Long" parameterType="int">
+        SELECT  tag_id FROM ms_article_tag GROUP BY tag_id ORDER BY  count(id) DESC LIMIT #{limit}
+    </select>
+    <select id="findHotTagBysTagId" resultType="com.zigui.blog.dao.pojo.Tag" parameterType="list">
+        select * from ms_tag where id in
+        <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
+            #{tagId}
+        </foreach>
+    </select>
+
+</mapper>

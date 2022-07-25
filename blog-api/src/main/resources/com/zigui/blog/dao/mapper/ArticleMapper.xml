@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zigui.blog.dao.mapper.ArticleMapper">
+
+
+    <select id="findHotArticles" resultType="com.zigui.blog.dao.pojo.Article" parameterType="int">
+        SELECT id , title FROM ms_article ORDER BY  view_counts DESC limit #{limit}
+    </select>
+    <select id="findNewArticles" resultType="com.zigui.blog.dao.pojo.Article" parameterType="int">
+        SELECT id , title FROM ms_article ORDER BY create_date DESC LIMIT #{limit}
+    </select>
+    <select id="findArchivesDTO" resultType="com.zigui.blog.dao.dto.ArchivesDTO">
+        select year(FROM_UNIXTIME(create_date/1000)) year,month(FROM_UNIXTIME(create_date/1000)) month, count(*) count from ms_article group by year,month
+    </select>
+</mapper>
